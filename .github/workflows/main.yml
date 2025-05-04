@@ -8,7 +8,15 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # Default port; override in your .env.production or PM2 if you need
-      APP_PORT: 3001
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
+      CLERK_SECRET_KEY:                  ${{ secrets.CLERK_SECRET_KEY }}
+      NEXT_PUBLIC_PIXABAY_KEY:           ${{ secrets.NEXT_PUBLIC_PIXABAY_KEY }}
+      POSTGRES_VERSION: ${{ secrets.POSTGRES_VERSION }}
+      POSTGRES_USER:    ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_DB:      ${{ secrets.POSTGRES_DB }}
+      POSTGRES_PORT:    ${{ secrets.POSTGRES_PORT }}
+      APP_PORT: 3003
     steps:
       - name: Checkout
         uses: actions/checkout@v3
