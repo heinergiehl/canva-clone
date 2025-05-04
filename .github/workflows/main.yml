@@ -1,42 +1,56 @@
+# .github/workflows/deploy-canva.yml
 name: CI/CD – Canva Clone
-
 on:
   push:
     branches: [ master ]
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    env:
+      # Default port; override in your .env.production or PM2 if you need
+      APP_PORT: 3001
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: 'latest'
-
-      - name: Install & Build
+      - name: Install & Build (CI check)
         run: |
           bun install
           bun run build
-
       - name: Copy SSH key
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key_path: ~/.ssh/id_ed25519
           script: |
+            set -e
+            # 1) Write .env.production on the server
+            cat > /var/www/myapps/canva-clone/.env.production <<EOF
+            POSTGRES_VERSION=${{ secrets.POSTGRES_VERSION }}
+            POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+            POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+            POSTGRES_DB=${{ secrets.POSTGRES_DB }}
+            POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}
+            DATABASE_URL=postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:${{ secrets.POSTGRES_PORT }}/${{ secrets.POSTGRES_DB }}
+            NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
+            CLERK_SECRET_KEY=${{ secrets.CLERK_SECRET_KEY }}
+            NEXT_PUBLIC_PIXABAY_KEY=${{ secrets.NEXT_PUBLIC_PIXABAY_KEY }}
+            APP_PORT=${{ env.APP_PORT }}
+            EOF
+            # 2) Ensure Postgres is running via Docker Compose
             cd /var/www/myapps/canva-clone
+            docker compose up -d db
+            # 3) Pull, install, build, and reload
             git pull origin master
             bun install
             bun run build
-            pm2 reload ecosystem.config.js --only canva-clone
+            pm2 reload ecosystem.config.js --only canva-clone --env production

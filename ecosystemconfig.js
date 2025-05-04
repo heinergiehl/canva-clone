@@ -7,7 +7,7 @@ module.exports = {
             args: 'run start',
             env_production: {
                 NODE_ENV: 'production',
-                PORT: process.env.APP_PORT || 3001,
+                PORT: process.env.APP_PORT || 3003,
                 DATABASE_URL: process.env.DATABASE_URL,
                 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
                 CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
@@ -15,4 +15,4 @@ module.exports = {
             }
         }
     ]
-};
+}
