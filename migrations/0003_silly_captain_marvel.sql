@@ -1,0 +1,1 @@
+ALTER TABLE "designs" ADD COLUMN "design_image" varchar(1000) DEFAULT '' NOT NULL;
