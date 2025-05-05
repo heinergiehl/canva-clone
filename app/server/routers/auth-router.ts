@@ -6,7 +6,6 @@ import { eq } from "drizzle-orm"
 
 export const authRouter = router({
   getDatabaseSyncStatus: publicProcedure.query(async ({ ctx }) => {
-    console.log("ctx", ctx)
     const auth = ctx.auth
     const userId = auth.userId
     if (!userId) {
@@ -15,16 +14,21 @@ export const authRouter = router({
       }
     }
     console.log("userId", userId)
-    const userDb = db.select().from(users).where(eq(users.clerkUserId, userId))
+    const userDb = await db
+      .select()
+      .from(users)
+      .where(eq(users.clerkUserId, userId))
+      .limit(1)
+      .then((r) => r[0])
 
     if (!userDb) {
-      console.log("userDb", userDb)
       const newUser = await db.insert(users).values({
         clerkUserId: userId,
         email: await currentUser().then(
           (user) => user!.emailAddresses[0].emailAddress
         ),
       })
+      console.log("newUser69", newUser)
       return {
         isSynched: false,
       }

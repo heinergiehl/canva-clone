@@ -6,6 +6,7 @@ import { ClerkProvider } from "@clerk/nextjs"
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { CustomSidebarWithSheet } from "@/components/custom-sidebar"
 import { Suspense } from "react"
+import { trpc } from "./_trpc/client"
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],

@@ -24,6 +24,7 @@ const PAGE_SIZE = 6
 
 export default function Home() {
   const searchParams = useSearchParams()
+  const authMutation = trpc.auth.getDatabaseSyncStatus.useQuery()
   // read `?page=...` from the URL, default to 1
   const pageParam = parseInt(searchParams.get("page") ?? "1", 10)
   const [page, setPage] = useState(pageParam)
