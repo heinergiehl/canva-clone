@@ -24,20 +24,18 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <Suspense fallback={<div className="w-full h-full" />}>
-      <ClerkProvider>
-        <TRPCProvider>
-          <html lang="en">
-            <body
-              className={`${geistSans.variable} ${geistMono.variable} bg-[rgba(43,59,74,0.1)] antialiased w-[calc(100dvw-1px)] h-[calc(100dvh-1px)] items-center flex justify-around`}
-            >
-              <main className="flex items-center justify-center w-full">
-                {children}
-              </main>
-            </body>
-          </html>
-        </TRPCProvider>
-      </ClerkProvider>
-    </Suspense>
+    <ClerkProvider>
+      <TRPCProvider>
+        <html lang="en">
+          <body
+            className={`${geistSans.variable} ${geistMono.variable} bg-[rgba(43,59,74,0.1)] antialiased w-[calc(100dvw-1px)] h-[calc(100dvh-1px)] items-center flex justify-around`}
+          >
+            <main className="flex items-center justify-center w-full">
+              {children}
+            </main>
+          </body>
+        </html>
+      </TRPCProvider>
+    </ClerkProvider>
   )
 }
