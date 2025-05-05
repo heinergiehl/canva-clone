@@ -5,7 +5,7 @@ services:
     container_name: myapp-db
     restart: always
     env_file:
-      - .env.production
+      - .env
     ports:
       - "${POSTGRES_PORT}:5432"
     volumes:
