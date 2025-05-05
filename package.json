@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "migrate:generate": "drizzle-kit generate",
-    "migrate:push":     "drizzle-kit push",
+    "migrate:push":     "drizzle-kit migrate",
     "lint": "next lint"
   },
   "dependencies": {
