@@ -74,6 +74,4 @@ jobs:
             git pull origin master
             bun install
             bun run build
-            bun run migrate:generate
-            bun run migrate:push
             pm2 reload ecosystem.config.js --only canva-clone --env production
