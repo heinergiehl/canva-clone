@@ -37,7 +37,6 @@ jobs:
       - name: Install & Build (CI check)
         run: |
           bun install
-          bun run migrate:push
           bun run build
       # 5) Prepare SSH key for deployment
       - name: Copy SSH key
@@ -75,4 +74,5 @@ jobs:
             git pull origin master
             bun install
             bun run build
+            bun run migrate:push
             pm2 reload ecosystem.config.js --only canva-clone --env production
