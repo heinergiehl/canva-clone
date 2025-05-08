@@ -10,6 +10,8 @@ import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import { DesignSidebar } from "@/components/design-sidebar"
 import { useCanvasStore } from "@/lib/canvas-store"
+import { Skeleton } from "@/components/ui/skeleton"
+import { DeleteAccountDialog } from "@/app/(home)/page"
 function Layout({ children }: { children: React.ReactNode }) {
   const updateDesign = trpc.design.updateDesign.useMutation()
   const { id } = useParams()
@@ -37,6 +39,8 @@ function Layout({ children }: { children: React.ReactNode }) {
     link.download = `${title || "design"}.png`
     link.click()
   }
+  // Delete account dialog
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
   return (
     <div className="flex flex-col  antialiased items-center justify-around ">
       <header className="h-14 w-screen flex items-center justify-end bg-gradient-to-r from-teal-400 to-purple-600 px-4">
@@ -46,14 +50,18 @@ function Layout({ children }: { children: React.ReactNode }) {
           onBlur={handleTitleBlur}
           className="w-1/4 text-white border-0 focus:ring-0"
         />
-
-        <UserButton>
+        <UserButton
+          showName
+          fallback={<Skeleton className="w-[100px] h-[32px] rounded-lg" />}
+        >
           <UserButton.MenuItems>
             <UserButton.Action
               label="Delete Account"
-              labelIcon={<Trash2Icon />}
+              labelIcon={
+                <Trash2Icon style={{ width: "16px", height: "16px" }} />
+              }
               onClick={() => {
-                alert("Delete Account")
+                setOpenDeleteDialog(true)
               }}
             />
           </UserButton.MenuItems>
@@ -68,6 +76,10 @@ function Layout({ children }: { children: React.ReactNode }) {
         <DesignSidebar />
         {children}
       </div>
+      <DeleteAccountDialog
+        open={openDeleteDialog}
+        onOpenChange={setOpenDeleteDialog}
+      />
     </div>
   )
 }

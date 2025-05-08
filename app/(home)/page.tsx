@@ -31,7 +31,7 @@ import { Loader2, Trash2Icon, Variable } from "lucide-react"
 
 const PAGE_SIZE = 6
 
-function DeleteAccountDialog({
+export function DeleteAccountDialog({
   open,
   onOpenChange,
 }: {
