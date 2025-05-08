@@ -70,8 +70,6 @@ jobs:
             # B) Start/ensure Postgres via Docker Compose
             cd /var/www/myapps/canva-clone
             docker compose up -d db
-            git reset --hard HEAD
-            git clean -fd  
             # C) Pull latest code, rebuild & reload with PM2
             git pull origin master
             bun install
