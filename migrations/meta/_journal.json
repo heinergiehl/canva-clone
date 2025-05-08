@@ -5,36 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1745094289059,
-      "tag": "0000_heavy_tyrannus",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1745185048757,
-      "tag": "0001_perpetual_skaar",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1745194433516,
-      "tag": "0002_wet_colonel_america",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1745851705861,
-      "tag": "0003_silly_captain_marvel",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1745854339071,
-      "tag": "0004_flaky_monster_badoon",
+      "when": 1746706208582,
+      "tag": "0000_perfect_midnight",
       "breakpoints": true
     }
   ]

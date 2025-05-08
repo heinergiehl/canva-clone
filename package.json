@@ -8,6 +8,7 @@
     "start": "next start",
     "migrate:generate": "drizzle-kit generate",
     "migrate:push": "drizzle-kit migrate",
+    "db:reset": "bun run scripts/reset-db.js && rm -rf migrations/* && drizzle-kit generate&& drizzle-kit migrate",
     "lint": "next lint"
   },
   "dependencies": {
