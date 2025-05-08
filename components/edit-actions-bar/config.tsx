@@ -41,7 +41,7 @@ export type EditActionsBarProps = {
   shapeFill: string
   shapeStroke: string
   shapeStrokeWidth: number
-
+  canvasBackground: string
   // callbacks
   onFontFamilyChange: (f: string) => void
   onFontSizeChange: (s: number) => void

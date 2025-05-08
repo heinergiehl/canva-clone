@@ -1,7 +1,11 @@
 // middleware.ts
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server"
+import {
+  clerkMiddleware,
+  createRouteMatcher,
+  getAuth,
+} from "@clerk/nextjs/server"
 
 // 1️⃣ define which routes are public (no auth check)
 const publicRoutes = createRouteMatcher([
@@ -13,6 +17,7 @@ const publicRoutes = createRouteMatcher([
 export default clerkMiddleware(
   // 2️⃣ your custom auth hook
   async (auth, req: NextRequest) => {
+    console.log("userId", auth)
     // if this request is NOT one of our public routes...
     if (!publicRoutes(req)) {
       // protect() will

@@ -1,7 +1,7 @@
 import { db, users } from "@/db"
-import { currentUser } from "@clerk/nextjs/server"
+import { clerkClient, currentUser } from "@clerk/nextjs/server"
 
-import { publicProcedure, router } from "../trpc"
+import { protectedProcedure, publicProcedure, router } from "../trpc"
 import { eq } from "drizzle-orm"
 
 export const authRouter = router({
@@ -34,6 +34,28 @@ export const authRouter = router({
       }
     }
 
+    return {
+      isSynched: true,
+    }
+  }),
+  deleteUser: protectedProcedure.mutation(async ({ ctx }) => {
+    const auth = ctx.auth
+    const userId = auth.userId
+    if (!userId) {
+      return {
+        isSynched: false,
+      }
+    }
+    console.log("userId", userId)
+    const userDb = await db
+      .delete(users)
+      .where(eq(users.clerkUserId, userId))
+      .returning()
+      .then((r) => r[0])
+
+    const newClerkClient = await clerkClient()
+    const result = await newClerkClient.users.deleteUser(userId)
+    console.log("result", result)
     return {
       isSynched: true,
     }

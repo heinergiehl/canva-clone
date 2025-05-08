@@ -17,13 +17,13 @@ export type CanvasContainerProps = {
   width: number
   height: number
   canvasState: any
-  onCanvasBackgroundChange: (color: string) => void
+
   onSelectionChange: (obj: FabricObject | null) => void
   onTextSync: (obj: IText) => void
   onImageShapeSync: (obj: FabricObject) => void
   toolbarRef: React.RefObject<HTMLDivElement | null>
 }
-const ERASER_CURSOR = "url('fabric/eraser.svg') 16 16, auto"
+
 export function CanvasContainer({
   width,
   height,
@@ -31,7 +31,7 @@ export function CanvasContainer({
   onSelectionChange,
   onTextSync,
   onImageShapeSync,
-  onCanvasBackgroundChange,
+
   toolbarRef,
 }: CanvasContainerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -41,7 +41,7 @@ export function CanvasContainer({
   const isCanvasSelected = useCanvasStore((s) => s.isCanvasSelected)
   const drawTool = useCanvasStore((s) => s.drawTool)
   const setCanvasAsSelected = useCanvasStore((s) => s.setCanvasAsSelected)
-  const [cursor, setCursor] = useState("")
+
   useEffect(() => {
     if (!canvasRef.current || !wrapperRef.current) return
 
@@ -65,6 +65,7 @@ export function CanvasContainer({
         c.getObjects().forEach((o) => {
           if (o instanceof IText) o.set({ padding: 10 })
         })
+
         c.requestRenderAll()
       })
     }
@@ -107,7 +108,6 @@ export function CanvasContainer({
       console.log("sync", o)
       onSelectionChange(o)
       if (o instanceof IText) onTextSync(o)
-      else if (o instanceof FabricImage) onImageShapeSync(o)
       else onImageShapeSync(o)
     }
 
@@ -147,12 +147,6 @@ export function CanvasContainer({
     if (canvas?.getActiveObjects().length) {
       setCanvasAsSelected(false)
     }
-
-    console.log(
-      "canvas selected",
-      isCanvasSelected,
-      canvas?.getActiveObjects().length
-    )
   }, [canvas?.getActiveObjects().length, isCanvasSelected])
 
   useEffect(() => {
@@ -175,8 +169,8 @@ export function CanvasContainer({
   }, [canvas, onSelectionChange, setCanvasAsSelected])
 
   //experimenting with erasing feature
-  // …
-  // 1️⃣ keep a real ref for our custom cursor
+
+  // 1️⃣ keep a real ref for the custom cursor
   const cursorRef = useRef<fabric.FabricObject | null>(null)
 
   const activeToolTab = useCanvasStore((s) => s.toolTab)
@@ -202,7 +196,6 @@ export function CanvasContainer({
 
     // 2️⃣ helper to promise-ify loadSVGFromURL
 
-    // load and install our cursor
     async function loadSVG(url: string) {
       const { objects, options } = await fabric.loadSVGFromURL(
         "/fabric/eraser.svg"

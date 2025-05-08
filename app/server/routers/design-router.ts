@@ -85,7 +85,7 @@ export const designRouter = router({
       let canvasData: CanvasState = {
         version: 4,
         objects: [],
-        background: null,
+        background: "#ffffff",
       }
       if (input.templateId) {
         const tpl = await ctx.db

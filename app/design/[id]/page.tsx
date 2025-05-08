@@ -37,7 +37,7 @@ export default function DesignPage() {
   const [fontColor, setFontColor] = useState("#000000")
   const [textStrokeColor, setTextStrokeColor] = useState("#000000")
   const [textStrokeWidth, setTextStrokeWidth] = useState(0)
-
+  const canvasStore = useCanvasStore((state) => state)
   // image state
   const [opacity, setOpacity] = useState(1)
 
@@ -53,7 +53,7 @@ export default function DesignPage() {
     const saver = debounce(() => {
       console.log("saving...")
       const json: any = canvas.toDatalessJSON()
-      json.background = canvas.backgroundColor ?? null
+      json.background = canvas.backgroundColor || "#ffffff"
 
       const thumbDataUrl = canvas.toDataURL({
         format: "png",
@@ -96,6 +96,7 @@ export default function DesignPage() {
     }
   }, [canvas, design])
   const editActionsBarRef = React.useRef<HTMLDivElement>(null)
+
   if (!isSuccess) return null
 
   return (
@@ -117,9 +118,14 @@ export default function DesignPage() {
           shapeFill={shapeFill}
           shapeStroke={shapeStroke}
           shapeStrokeWidth={shapeStrokeWidth}
+          canvasBackground={canvasStore.canvas?.backgroundColor as string}
           onFontFamilyChange={(f) => {
             if (activeObj instanceof IText) activeObj.set("fontFamily", f)
             setFontFamily(f)
+            canvas?.fire("object:modified", {
+              target: activeObj!,
+            })
+
             canvas?.requestRenderAll()
           }}
           onFontSizeChange={(s) => {
@@ -151,6 +157,10 @@ export default function DesignPage() {
           }}
           onTextStrokeWidthChange={(w) => {
             if (activeObj instanceof IText) activeObj.set("strokeWidth", w)
+            //by default, stroke color is null, so we need to set it to the same as the text color
+            if (activeObj instanceof IText && !activeObj.stroke) {
+              activeObj.set("stroke", textStrokeColor)
+            }
             setTextStrokeWidth(w)
             canvas?.requestRenderAll()
             canvas?.fire("object:modified", {
@@ -194,12 +204,8 @@ export default function DesignPage() {
             canvas?.requestRenderAll()
           }}
           onCanvasBackgroundChange={(bg) => {
-            canvas?.set({ backgroundColor: bg })
+            canvasStore.setBackgroundColor(bg)
             setCanvasBackground(bg)
-
-            canvas?.requestRenderAll()
-            canvas?.fire("canvas:modified")
-            console.log("canvas background changed", bg)
           }}
         />
       </div>
@@ -224,7 +230,6 @@ export default function DesignPage() {
             setShapeStroke((o.stroke as string) || "#000000")
             setShapeStrokeWidth(o.strokeWidth ?? 1)
           }}
-          onCanvasBackgroundChange={(bg) => {}}
         />
       </div>
     </main>

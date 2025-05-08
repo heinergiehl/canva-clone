@@ -13,15 +13,6 @@ import { TextControls } from "./text-controls"
 import { ImageControls } from "./image-controls"
 import { ShapeControls } from "./shape-controls"
 
-// Shared opacity slider
-
-// Text-specific controls
-
-// Image-specific controls
-
-// Shape-specific controls
-
-// Map types to components
 const ControlMap: Record<ObjType, React.FC<any>> = {
   canvas: CanvasControls,
   text: TextControls,
@@ -64,7 +55,7 @@ export function EditActionsBar(props: EditActionsBarProps) {
     >
       {type === "canvas" ? (
         <CanvasControls
-          bgColor={canvas?.backgroundColor as string}
+          bgColor={props.canvasBackground}
           onBgChange={props.onCanvasBackgroundChange}
         />
       ) : (

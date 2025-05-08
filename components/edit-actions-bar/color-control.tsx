@@ -12,9 +12,12 @@ function ColorControl({ color, label, onChange }: ColorControlProps) {
   const ref = useRef<HTMLInputElement>(null)
   return (
     <CustomTooltip content={label}>
-      <div className="relative flex items-center">
+      <div className="relative flex items-center ">
         <Button variant="ghost" size="sm" onClick={() => ref.current?.click()}>
-          <div className="w-6 h-6 rounded" style={{ backgroundColor: color }} />
+          <div
+            className="w-6 h-6 rounded border"
+            style={{ backgroundColor: color }}
+          />
         </Button>
         <Input
           ref={ref}

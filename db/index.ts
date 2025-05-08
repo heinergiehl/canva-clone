@@ -39,13 +39,15 @@ export const designs = pgTable("designs", {
   id: serial("id").primaryKey(),
   userId: integer("user_id")
     .notNull()
-    .references(() => users.id),
-  templateId: integer("template_id").references(() => templates.id),
+    // ⇣ cascade delete when the parent user is removed
+    .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
+  templateId: integer("template_id").references(() => templates.id, {
+    onDelete: "set null",
+  }),
   title: varchar("title", { length: 255 }).notNull(),
   canvas: jsonb("canvas").notNull(),
-  width: integer("width").notNull(), // new
-  height: integer("height").notNull(), // new
-
+  width: integer("width").notNull(),
+  height: integer("height").notNull(),
   designImage: text("design_image").default("").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")

@@ -259,6 +259,7 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
       backgroundColor: color,
     })
     c.requestRenderAll()
+    c.fire("canvas:modified") // ← new event
   },
   setCanvasAsSelected: (bool: boolean) =>
     set((state) => ({ isCanvasSelected: bool })),
