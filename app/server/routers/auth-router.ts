@@ -22,12 +22,17 @@ export const authRouter = router({
       .then((r) => r[0])
 
     if (!userDb) {
-      const newUser = await db.insert(users).values({
-        clerkUserId: userId,
-        email: await currentUser().then(
-          (user) => user!.emailAddresses[0].emailAddress
-        ),
-      })
+      const newUser = await db
+        .insert(users)
+        .values({
+          clerkUserId: userId,
+          email: await currentUser().then(
+            (user) => user!.emailAddresses[0].emailAddress
+          ),
+        })
+        .onConflictDoNothing({
+          target: users.clerkUserId,
+        })
       console.log("newUser69", newUser)
       return {
         isSynched: false,
@@ -47,7 +52,7 @@ export const authRouter = router({
       }
     }
     console.log("userId", userId)
-    const userDb = await db
+    await db
       .delete(users)
       .where(eq(users.clerkUserId, userId))
       .returning()
